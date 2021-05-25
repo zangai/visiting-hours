@@ -50,8 +50,15 @@ class ShowPageController extends Controller
         $page = ORM::factory('Page')->findOne($reference);
         if (!$page) return $this->notFound();
         if ($page->prepare && !$this->manage) return $this->forbidden();
-        
-        $context = ['info' => $page, 'link' => $page->getLink(), 'google_api_key' => self::GOOGLE_API_KEY];
+
+        $calendar = $page->getCalendar();
+
+        $visitsByDate = $calendar->getvisitsByDate();
+
+        $context = ['info' => $page, 
+                    'link' => $page->getLink(),
+                    'google_api_key' => self::GOOGLE_API_KEY,
+                    'visitsByDate' => $visitsByDate];
         $this->view('show-page/page.html.twig', $context);
     }
     

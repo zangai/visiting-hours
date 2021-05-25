@@ -88,6 +88,15 @@
                     </div>
                 </div>
             </div>
+            <div class="panel-body">
+                <h3>Opkomende bezoeken</h3>
+                {% for visitsOnDay in visitsByDate %}
+                    <h4>{{ visitsOnDay[0].date | date('d M Y')}}</h4>
+                    {% for visit in visitsOnDay %}
+                        {{ visit.time }} {{ visit.name }}
+                    {% endfor %}
+                {% endfor %}
+            </div>
             <div class="panel-footer">
                 {% if info.prepare %}<a class="btn btn-primary" href="/create/step1?start=publish">publiceren</a>{% endif %}
                 <a class="btn btn-default" href="/create/step1">Pagina bewerken</a>

@@ -252,6 +252,34 @@ class Calendar
         $visits = $this->page->visits ? (array)json_decode($this->page->visits) : [];
         return array_filter($visits);
     }
+
+    function compareVisitTimes($a, $b) {
+        if ($a->time == $b->time) {
+            return 0;
+        }    
+
+        return ($a->time < $b->time) ? -1 : 1;
+    }
+
+    public function getVisitsByDate() {
+        $allVisits = $this->getVisits();
+        $visitsByDate = [];
+
+        foreach ($allVisits as $visit) {
+            $unix = strtotime($visit->date);
+            if (!key_exists($unix, $visitsByDate)) {
+                $visitsByDate[$unix] = [];
+            }
+
+            $visitsByDate[$unix][] = $visit;
+        }
+
+        foreach($visitsByDate as $visitsOnDate) {
+            usort($visitsByDate, 'compareVisitTimes');
+        }
+
+        return $visitsByDate;
+    }
     
     /**
      * Add a visit
